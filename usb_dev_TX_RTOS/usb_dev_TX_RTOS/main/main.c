@@ -160,27 +160,7 @@ static esp_err_t camera_init(uint32_t xclk_freq_hz, pixformat_t pixel_format, fr
         return ret;
     }
     
-    // Get the sensor object, and then use some of its functions to adjust the parameters when taking a photo.
-    // Note: Do not call functions that set resolution, set picture format and PLL clock,
-    // If you need to reset the appeal parameters, please reinitialize the sensor.
-    
     sensor_t *s = esp_camera_sensor_get();
-    /*
-    s->set_vflip(s, 1); // flip it back
-    // initial sensors are flipped vertically and colors are a bit saturated
-    if (s->id.PID == OV3660_PID) {
-        s->set_brightness(s, 1); // up the blightness just a bit
-        s->set_saturation(s, -2); // lower the saturation
-    }
-
-    if (s->id.PID == OV3660_PID || s->id.PID == OV2640_PID) {
-        s->set_vflip(s, 1); // flip it back
-    } else if (s->id.PID == GC0308_PID) {
-        s->set_hmirror(s, 0);
-    } else if (s->id.PID == GC032A_PID) {
-        s->set_vflip(s, 1);
-    }
-    */
 
     // Get the basic information of the sensor.
     camera_sensor_info_t *s_info = esp_camera_sensor_get_info(&(s->id));
@@ -282,7 +262,7 @@ void capture_task(void *pvParameter) {
         // In the capturing task
         xTaskNotifyGive(uartTaskHandle);  // Notify UART task that new data is available
 
-        // Optional: Wait before capturing the next frame
+        // Optional: Wait before capturing the next frame, just to take up pressure on the CPU
         vTaskDelay(pdMS_TO_TICKS(5));
     }
 }
@@ -300,9 +280,6 @@ void uart_task(void *pvParameter) {
         if (fb) {
             // Process the image data in fb->buf
             char test[1] = {0xD9};
-            // int uart_ret = uart_write_bytes(UART_NUM_1, fb->len, sizeof(size_t)); // send the length before or the null character // TODO: THIS IS NOT WORKING
-            // fb->buf[fb->len] = test[0];
-            // fb->len = fb->len+1;
 
             // Process the received data here
             int uart_ret = uart_write_bytes(UART_NUM_1, (const char *)fb->buf, fb->len);
