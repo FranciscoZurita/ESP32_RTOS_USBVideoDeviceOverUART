@@ -160,7 +160,7 @@ static uvc_fb_t* camera_fb_get_cb(void *cb_ctx) {
     if (xSemaphoreTake(bufferMutex, portMAX_DELAY)) {
         s_fb.uvc_fb.buf = last_valid_frame;
         s_fb.uvc_fb.len = last_valid_frame_size;
-        s_fb.uvc_fb.width = 320;    // Example width of the "no signal" frame (adjust as necessary)
+        s_fb.uvc_fb.width = 320;    // Example width of the "no signal" frame
         s_fb.uvc_fb.height = 240;   // Example height of the "no signal" frame
         s_fb.uvc_fb.format = UVC_FORMAT_JPEG;
         int64_t now = esp_timer_get_time();
