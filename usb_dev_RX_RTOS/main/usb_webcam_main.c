@@ -63,7 +63,7 @@ static const char *TAG = "usb_webcam_uart";
 
 #define UART_PORT_NUM UART_NUM_1
 #define UART_TX_PIN 17 //pin 17
-#define UART_RX_PIN 18 //pin 17
+#define UART_RX_PIN 18 //pin 18
 #define UART_BAUD_RATE 2000000
 
 // Debug purposes
